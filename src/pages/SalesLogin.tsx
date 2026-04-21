@@ -27,15 +27,10 @@ const SalesLogin = () => {
     <div className="grain relative flex min-h-screen items-center justify-center bg-charcoal px-6">
       <Link
         to="/login"
-        className="absolute left-6 top-6 z-20 inline-flex items-center gap-2 text-[10px] tracking-[0.3em] text-muted-foreground transition-colors hover:text-primary md:left-10 md:top-8"
+        aria-label="Back"
+        className="absolute left-6 top-6 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/60 text-off-white backdrop-blur transition-colors hover:border-primary hover:text-primary md:left-10 md:top-8"
       >
-        <ArrowLeft className="h-3 w-3" /> BACK
-      </Link>
-      <Link
-        to="/"
-        className="absolute right-6 top-6 z-20 text-[10px] tracking-[0.3em] text-muted-foreground transition-colors hover:text-primary md:right-10 md:top-8"
-      >
-        HOME →
+        <ArrowLeft className="h-4 w-4" />
       </Link>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
