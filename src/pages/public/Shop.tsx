@@ -58,29 +58,11 @@ const ShopPage = () => {
   return (
     <>
       <section className="diagonal-lines px-6 py-12 md:px-12 md:py-20 border-b border-border">
-        <h1 className="font-display text-6xl md:text-[8rem] leading-none">SHOP — SUMMIT BRANCH</h1>
-        <p className="mt-3 text-xs tracking-[0.3em] text-primary">
-          ALL ITEMS AVAILABLE IN-STORE — ORDER VIA TELEGRAM
-        </p>
+        <h1 className="font-display text-6xl md:text-[8rem] leading-none">EXPLORE COLLECTION</h1>
       </section>
 
       <div className="sticky top-16 z-30 backdrop-blur-md bg-background/90 border-b border-border">
         <div className="flex flex-wrap items-center gap-3 px-6 py-4 md:px-12">
-          <div className="flex flex-wrap gap-2">
-            {CATS.map((c) => (
-              <button
-                key={c.key}
-                onClick={() => setCat(c.key)}
-                className={`border px-3 py-1.5 text-[10px] tracking-[0.25em] transition-all ${
-                  cat === c.key
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "border-border text-off-white hover:border-primary"
-                }`}
-              >
-                {c.label}
-              </button>
-            ))}
-          </div>
           <div className="ml-auto flex items-center gap-3">
             <div className="flex items-center gap-2 border-b border-border px-2">
               <Search className="h-3 w-3 text-muted-foreground" />
@@ -88,9 +70,21 @@ const ShopPage = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="SEARCH ITEMS..."
-                className="bg-transparent py-1 text-xs outline-none placeholder:tracking-widest placeholder:text-muted-foreground w-40"
+                className="bg-transparent py-1 text-xs outline-none placeholder:tracking-widest placeholder:text-muted-foreground w-32 md:w-40"
               />
             </div>
+            <button
+              onClick={() => setCatsOpen((v) => !v)}
+              aria-expanded={catsOpen}
+              className={`flex items-center gap-2 border px-3 py-1.5 text-[10px] tracking-[0.25em] transition-all ${
+                catsOpen || cat !== "ALL"
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "border-border text-off-white hover:border-primary"
+              }`}
+            >
+              <SlidersHorizontal className="h-3 w-3" />
+              {cat === "ALL" ? "CATEGORIES" : CATS.find((c) => c.key === cat)?.label}
+            </button>
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as (typeof SORTS)[number])}
@@ -102,11 +96,38 @@ const ShopPage = () => {
             </select>
           </div>
         </div>
+        <AnimatePresence initial={false}>
+          {catsOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden border-t border-border"
+            >
+              <div className="flex flex-wrap gap-2 px-6 py-4 md:px-12">
+                {CATS.map((c) => (
+                  <button
+                    key={c.key}
+                    onClick={() => { setCat(c.key); setCatsOpen(false); }}
+                    className={`border px-3 py-1.5 text-[10px] tracking-[0.25em] transition-all ${
+                      cat === c.key
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "border-border text-off-white hover:border-primary"
+                    }`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <section className="px-6 py-12 md:px-12">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-          {filtered.map((it) => {
+          {paginated.map((it) => {
             const oos = it.qty === 0;
             const low = it.qty > 0 && it.qty <= 3;
             return (
