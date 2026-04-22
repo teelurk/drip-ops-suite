@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, SlidersHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { InventoryItem } from "@/data/inventory";
 import { ItemDrawer } from "@/components/public/ItemDrawer";
+
+const PAGE_SIZE = 12;
 
 type Cat = "ALL" | "Shoes" | "Tops" | "Bottoms" | "Accessories";
 const CATS: { key: Cat; label: string }[] = [
@@ -24,6 +26,8 @@ const ShopPage = () => {
   const [sort, setSort] = useState<(typeof SORTS)[number]>("NEWEST");
   const [active, setActive] = useState<InventoryItem | null>(null);
   const [params, setParams] = useSearchParams();
+  const [catsOpen, setCatsOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const id = params.get("item");
@@ -45,32 +49,20 @@ const ShopPage = () => {
     return list;
   }, [inventory, cat, search, sort]);
 
+  useEffect(() => { setPage(1); }, [cat, search, sort]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
   return (
     <>
       <section className="diagonal-lines px-6 py-12 md:px-12 md:py-20 border-b border-border">
-        <h1 className="font-display text-6xl md:text-[8rem] leading-none">SHOP — SUMMIT BRANCH</h1>
-        <p className="mt-3 text-xs tracking-[0.3em] text-primary">
-          ALL ITEMS AVAILABLE IN-STORE — ORDER VIA TELEGRAM
-        </p>
+        <h1 className="font-display text-6xl md:text-[8rem] leading-none">EXPLORE COLLECTION</h1>
       </section>
 
       <div className="sticky top-16 z-30 backdrop-blur-md bg-background/90 border-b border-border">
         <div className="flex flex-wrap items-center gap-3 px-6 py-4 md:px-12">
-          <div className="flex flex-wrap gap-2">
-            {CATS.map((c) => (
-              <button
-                key={c.key}
-                onClick={() => setCat(c.key)}
-                className={`border px-3 py-1.5 text-[10px] tracking-[0.25em] transition-all ${
-                  cat === c.key
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "border-border text-off-white hover:border-primary"
-                }`}
-              >
-                {c.label}
-              </button>
-            ))}
-          </div>
           <div className="ml-auto flex items-center gap-3">
             <div className="flex items-center gap-2 border-b border-border px-2">
               <Search className="h-3 w-3 text-muted-foreground" />
@@ -78,9 +70,21 @@ const ShopPage = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="SEARCH ITEMS..."
-                className="bg-transparent py-1 text-xs outline-none placeholder:tracking-widest placeholder:text-muted-foreground w-40"
+                className="bg-transparent py-1 text-xs outline-none placeholder:tracking-widest placeholder:text-muted-foreground w-32 md:w-40"
               />
             </div>
+            <button
+              onClick={() => setCatsOpen((v) => !v)}
+              aria-expanded={catsOpen}
+              className={`flex items-center gap-2 border px-3 py-1.5 text-[10px] tracking-[0.25em] transition-all ${
+                catsOpen || cat !== "ALL"
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "border-border text-off-white hover:border-primary"
+              }`}
+            >
+              <SlidersHorizontal className="h-3 w-3" />
+              {cat === "ALL" ? "CATEGORIES" : CATS.find((c) => c.key === cat)?.label}
+            </button>
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as (typeof SORTS)[number])}
@@ -92,11 +96,38 @@ const ShopPage = () => {
             </select>
           </div>
         </div>
+        <AnimatePresence initial={false}>
+          {catsOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden border-t border-border"
+            >
+              <div className="flex flex-wrap gap-2 px-6 py-4 md:px-12">
+                {CATS.map((c) => (
+                  <button
+                    key={c.key}
+                    onClick={() => { setCat(c.key); setCatsOpen(false); }}
+                    className={`border px-3 py-1.5 text-[10px] tracking-[0.25em] transition-all ${
+                      cat === c.key
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "border-border text-off-white hover:border-primary"
+                    }`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <section className="px-6 py-12 md:px-12">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 md:gap-6">
-          {filtered.map((it) => {
+          {paginated.map((it) => {
             const oos = it.qty === 0;
             const low = it.qty > 0 && it.qty <= 3;
             return (
@@ -135,6 +166,39 @@ const ShopPage = () => {
         </div>
         {filtered.length === 0 && (
           <p className="py-20 text-center text-sm text-muted-foreground">No items match your filters.</p>
+        )}
+        {totalPages > 1 && (
+          <div className="mt-12 flex items-center justify-center gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="flex h-9 w-9 items-center justify-center border border-border text-off-white transition-colors hover:border-primary hover:text-primary disabled:opacity-30 disabled:hover:border-border disabled:hover:text-off-white"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPage(p)}
+                className={`h-9 min-w-[36px] border px-2 text-[11px] tracking-[0.2em] transition-all ${
+                  p === currentPage
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border text-off-white hover:border-primary"
+                }`}
+              >
+                {p.toString().padStart(2, "0")}
+              </button>
+            ))}
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="flex h-9 w-9 items-center justify-center border border-border text-off-white transition-colors hover:border-primary hover:text-primary disabled:opacity-30 disabled:hover:border-border disabled:hover:text-off-white"
+              aria-label="Next page"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         )}
       </section>
 
