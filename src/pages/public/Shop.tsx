@@ -23,7 +23,7 @@ const ShopPage = () => {
   const { inventory } = useApp();
   const [cat, setCat] = useState<Cat>("ALL");
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<(typeof SORTS)[number]>("NEWEST");
+  
   const [active, setActive] = useState<InventoryItem | null>(null);
   const [params, setParams] = useSearchParams();
   const [catsOpen, setCatsOpen] = useState(false);
