@@ -56,7 +56,7 @@ const HomePage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mt-4 font-mono text-[13px] uppercase text-[#b8ff57]"
-              style={{ letterSpacing: "6px" }}
+              style={{ letterSpacing: "6px", textShadow: "0 0 20px rgba(0,0,0,0.5)" }}
             >
               ADDIS ABABA
             </motion.p>
