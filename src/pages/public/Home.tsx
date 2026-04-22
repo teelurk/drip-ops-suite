@@ -20,52 +20,63 @@ const HomePage = () => {
 
   return (
     <>
-      {/* HERO */}
-      <section className="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden diagonal-lines px-6 py-12 md:px-12">
-        <div className="grid w-full gap-10 md:grid-cols-5">
-          <div className="md:col-span-3 relative z-10">
+      {/* HERO — animated mesh gradient */}
+      <section className="relative grain overflow-hidden min-h-[calc(100vh-4rem)] bg-[#f0ede8] dark:bg-[#080808]">
+        {/* Mesh orbs */}
+        <div className="hero-orb hero-orb-1" />
+        <div className="hero-orb hero-orb-2" />
+        <div className="hero-orb hero-orb-3" />
+        <div className="hero-orb hero-orb-4" />
+        <div className="absolute inset-0 backdrop-blur-[1px]" />
+
+        <div className="relative z-10 grid min-h-[calc(100vh-4rem)] grid-cols-1 items-center gap-10 px-6 py-12 md:px-12 lg:grid-cols-[55%_45%] lg:gap-0 lg:px-0 lg:py-0">
+          {/* LEFT — text */}
+          <div className="text-center lg:pl-[8%] lg:text-left">
             <motion.h1
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
-              className="font-display leading-[0.85] text-[18vw] md:text-[12vw] text-off-white"
+              className="font-display leading-[0.85] text-[64px] md:text-[100px] lg:text-[140px] text-[#080808] dark:text-white"
+              style={{ letterSpacing: "-2px", fontWeight: 900 }}
             >
               SAWKEM
             </motion.h1>
             <motion.h2
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15 }}
-              className="font-display leading-[0.85] text-[18vw] md:text-[12vw] -mt-4 md:-mt-8 ml-4 md:ml-12"
-              style={{ WebkitTextStroke: "1.5px hsl(var(--off-white))", color: "transparent" }}
+              className="font-display leading-[0.85] text-[64px] md:text-[100px] lg:text-[140px] text-[#080808] dark:text-white lg:ml-6"
+              style={{ letterSpacing: "-2px", fontWeight: 900, WebkitTextStroke: "2px currentColor", color: "transparent" }}
             >
               FASHION
             </motion.h2>
             <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="mt-6 text-xs tracking-[0.4em] text-primary"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-4 font-mono text-[13px] uppercase text-[#b8ff57]"
+              style={{ letterSpacing: "6px" }}
             >
-              ADDIS ABABA — EST. EVERYDAY DRIP
+              ADDIS ABABA
             </motion.p>
             <motion.p
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55 }}
-              className="mt-4 max-w-md text-sm text-off-white/80"
+              transition={{ duration: 0.6, delay: 0.45 }}
+              className="mx-auto mt-5 max-w-[420px] font-mono text-[15px] leading-[1.7] text-black/65 dark:text-white/75 lg:mx-0"
             >
               Premium streetwear. Serious quality. Ethiopia's dopest fits.
             </motion.p>
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="mt-8 flex flex-wrap gap-4"
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="mt-9 flex flex-wrap justify-center gap-4 lg:justify-start"
             >
               <Link
                 to="/shop"
-                className="bg-primary px-6 py-3 text-xs tracking-[0.25em] text-primary-foreground transition-all hover:bg-off-white"
+                className="group bg-[#b8ff57] px-9 py-4 font-mono text-[13px] uppercase text-[#080808] transition-all duration-[250ms] hover:bg-[#080808] hover:text-[#b8ff57] dark:hover:bg-white dark:hover:text-[#b8ff57]"
+                style={{ letterSpacing: "3px" }}
               >
                 SHOP NOW
               </Link>
@@ -73,30 +84,67 @@ const HomePage = () => {
                 href="https://www.tiktok.com/@sawkem_fashion"
                 target="_blank"
                 rel="noreferrer"
-                className="border border-off-white px-6 py-3 text-xs tracking-[0.25em] text-off-white transition-all hover:bg-off-white hover:text-background"
+                className="group flex items-center gap-2 border-[1.5px] border-current px-9 py-4 font-mono text-[13px] uppercase text-[#080808] transition-all duration-[250ms] hover:bg-[#080808] hover:text-[#f0ede8] dark:text-white dark:hover:bg-white dark:hover:text-[#080808]"
+                style={{ letterSpacing: "3px" }}
               >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="h-[14px] w-[14px]">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z" />
+                </svg>
                 WATCH US ON TIKTOK
               </a>
             </motion.div>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.75 }}
+              className="mt-5 font-mono text-[11px] uppercase text-black/35 dark:text-white/35"
+              style={{ letterSpacing: "2px" }}
+            >
+              6,874 followers • 51K+ likes on TikTok
+            </motion.p>
           </div>
 
+          {/* RIGHT — image */}
           <motion.div
             initial={{ opacity: 0, x: 60 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="md:col-span-2 relative h-[60vh] md:h-[80vh] overflow-hidden"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative h-[260px] w-full md:h-[300px] lg:h-screen"
           >
-            <img
-              src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&h=900&fit=crop"
-              alt="Streetwear editorial"
-              className="h-full w-full object-cover"
-            />
             <div
-              className="absolute inset-0 mix-blend-luminosity"
-              style={{ backgroundColor: "hsl(var(--primary) / 0.1)" }}
-            />
+              className="relative h-full w-full overflow-hidden"
+              style={{
+                clipPath:
+                  typeof window !== "undefined" && window.innerWidth >= 1024
+                    ? "polygon(0 0, 90% 0, 100% 5%, 100% 100%, 10% 100%, 0 95%)"
+                    : "none",
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=900&h=1400&fit=crop"
+                alt="Sawkem streetwear editorial"
+                className="h-full w-full object-cover"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#f0ede8] via-transparent to-transparent dark:from-[#080808]" />
+            </div>
           </motion.div>
         </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0.4 }}
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="pointer-events-none absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 lg:flex"
+        >
+          <span
+            className="font-mono text-[10px] uppercase text-black/40 dark:text-white/40"
+            style={{ letterSpacing: "4px" }}
+          >
+            SCROLL
+          </span>
+          <span className="block h-10 w-px bg-black/40 scroll-line dark:bg-white/40" />
+        </motion.div>
       </section>
 
       {/* MARQUEE */}
