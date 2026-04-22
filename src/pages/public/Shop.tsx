@@ -129,6 +129,14 @@ const ShopPage = () => {
                     <p className="mt-2 font-mono text-sm text-off-white">ETB {it.price.toLocaleString()}</p>
                   )}
                 </div>
+              </motion.button>
+            );
+          })}
+        </div>
+        {filtered.length === 0 && (
+          <p className="py-20 text-center text-sm text-muted-foreground">No items match your filters.</p>
+        )}
+      </section>
 
       <ItemDrawer
         item={active}
