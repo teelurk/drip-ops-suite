@@ -167,6 +167,39 @@ const ShopPage = () => {
         {filtered.length === 0 && (
           <p className="py-20 text-center text-sm text-muted-foreground">No items match your filters.</p>
         )}
+        {totalPages > 1 && (
+          <div className="mt-12 flex items-center justify-center gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="flex h-9 w-9 items-center justify-center border border-border text-off-white transition-colors hover:border-primary hover:text-primary disabled:opacity-30 disabled:hover:border-border disabled:hover:text-off-white"
+              aria-label="Previous page"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+              <button
+                key={p}
+                onClick={() => setPage(p)}
+                className={`h-9 min-w-[36px] border px-2 text-[11px] tracking-[0.2em] transition-all ${
+                  p === currentPage
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border text-off-white hover:border-primary"
+                }`}
+              >
+                {p.toString().padStart(2, "0")}
+              </button>
+            ))}
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="flex h-9 w-9 items-center justify-center border border-border text-off-white transition-colors hover:border-primary hover:text-primary disabled:opacity-30 disabled:hover:border-border disabled:hover:text-off-white"
+              aria-label="Next page"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        )}
       </section>
 
       <ItemDrawer
