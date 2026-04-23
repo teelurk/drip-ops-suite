@@ -5,6 +5,7 @@ import { Search, X, Plus, Minus, Check, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/context/AppContext";
 import { InventoryItem } from "@/data/inventory";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const cats = ["ALL","Shoes","Tops","Bottoms","Accessories"] as const;
 
