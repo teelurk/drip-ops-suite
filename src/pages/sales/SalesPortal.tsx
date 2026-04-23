@@ -5,6 +5,7 @@ import { Search, X, Plus, Minus, Check, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { useApp } from "@/context/AppContext";
 import { InventoryItem } from "@/data/inventory";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const cats = ["ALL","Shoes","Tops","Bottoms","Accessories"] as const;
 
@@ -43,9 +44,12 @@ const SalesPortal = () => {
           <p className="text-[10px] tracking-widest text-muted-foreground">SUMMIT BRANCH</p>
         </div>
         <p className="text-xs tracking-widest text-primary">{staffName?.toUpperCase()}</p>
-        <div className="text-right">
-          <p className="font-display text-xl">{now.toLocaleTimeString()}</p>
-          <p className="text-[10px] text-muted-foreground">{now.toLocaleDateString()}</p>
+        <div className="flex items-center gap-3">
+          <div className="text-right">
+            <p className="font-display text-xl">{now.toLocaleTimeString()}</p>
+            <p className="text-[10px] text-muted-foreground">{now.toLocaleDateString()}</p>
+          </div>
+          <ThemeToggle />
         </div>
       </div>
 
