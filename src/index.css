@@ -70,7 +70,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 8%;
 
-    --primary: 81 70% 42%;
+    --primary: 88 85% 28%;             /* darker acid green for AA contrast on light bg */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 40 15% 90%;
