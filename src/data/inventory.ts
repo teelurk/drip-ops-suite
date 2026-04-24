@@ -43,6 +43,11 @@ export const inventory: InventoryItem[] = [
   { id: 8, brand: "Timberland", name: "6-Inch Boot", category: "Shoes", sizes: ["40","41","42","43","44"], color: "Wheat", qty: 5, price: 6900, image: `https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=600&fit=crop&q=85` },
   { id: 9, brand: "Jordan", name: "1 Retro High Chicago", category: "Shoes", sizes: ["40","41","42","43","44"], color: "Red/White", qty: 4, price: 9500, image: jordan1Chicago },
   { id: 10, brand: "Jordan", name: "1 Retro High Royal", category: "Shoes", sizes: ["41","42","43","44"], color: "Royal Blue", qty: 3, price: 9500, image: `https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=600&h=600&fit=crop&q=85` },
+
+  // TOPS
+  { id: 11, brand: "SP5DER", name: "Hoodie", category: "Tops", sizes: ["S","M","L","XL"], color: "Black", qty: 12, price: 5500, image: sp5derHoodieBlack },
+  { id: 12, brand: "SP5DER", name: "Hoodie Pink Web", category: "Tops", sizes: ["S","M","L","XL","XXL"], color: "Pink", qty: 8, price: 5800, image: `https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=400&fit=crop` },
+  { id: 13, brand: "SP5DER", name: "Tracksuit", category: "Tops", sizes: ["M","L","XL"], color: "Red", qty: 5, price: 9200, image: `https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?w=400&h=400&fit=crop` },
   { id: 14, brand: "Balenciaga", name: "3XL Hoodie", category: "Tops", sizes: ["S","M","L","XL"], color: "Black", qty: 6, price: 14500, image: `https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop` },
   { id: 15, brand: "Balenciaga", name: "Track Top", category: "Tops", sizes: ["M","L","XL"], color: "Navy", qty: 4, price: 11200, image: `https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&h=400&fit=crop` },
   { id: 16, brand: "Broken Planet", name: "Hoodie", category: "Tops", sizes: ["S","M","L","XL"], color: "Brown", qty: 7, price: 6800, image: `https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=400&h=400&fit=crop` },
