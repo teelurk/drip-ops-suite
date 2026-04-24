@@ -1,3 +1,9 @@
+import rickOwensGeobasket from "@/assets/sales/rick-owens-geobasket.jpg";
+import sp5derHoodieBlack from "@/assets/sales/sp5der-hoodie-black.jpg";
+import noctaAf1 from "@/assets/sales/nocta-af1.jpg";
+import galleryDeptJeans from "@/assets/sales/gallery-dept-jeans.jpg";
+import jordan1Chicago from "@/assets/sales/jordan-1-chicago.jpg";
+
 export type Category = "Shoes" | "Tops" | "Bottoms" | "Accessories";
 
 export interface InventoryItem {
