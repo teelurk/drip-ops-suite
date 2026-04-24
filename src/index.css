@@ -120,6 +120,21 @@
     );
   }
 
+  /* Outlined hero text — visible in both themes */
+  .hero-outline-light {
+    color: transparent;
+    -webkit-text-stroke: 2px #080808;
+  }
+  .dark .hero-outline-dark,
+  .hero-outline-dark {
+    color: transparent;
+    -webkit-text-stroke: 2px #ffffff;
+  }
+  /* When inside .dark, override light variant */
+  .dark .hero-outline-light {
+    -webkit-text-stroke: 2px #ffffff;
+  }
+
   /* Permanently dark sections (used on light + dark mode for stylistic black bands).
      Re-declares the dark theme tokens locally so all children render correctly. */
   .dark-band {
