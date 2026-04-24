@@ -150,7 +150,7 @@ const HomePage = () => {
       </section>
 
       {/* MARQUEE */}
-      <section className="bg-[hsl(0_0%_6%)] py-10">
+      <section className="dark-band py-10">
         <BrandMarquee />
       </section>
 
