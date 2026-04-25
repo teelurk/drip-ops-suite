@@ -61,7 +61,7 @@ export const PublicFooter = () => {
               href="https://www.tiktok.com/@sawkem_fashion"
               target="_blank"
               rel="noreferrer"
-              className="text-off-white transition-colors hover:text-primary"
+              className="text-foreground transition-colors hover:text-primary"
               aria-label="TikTok"
             >
               <TikTokIcon className="h-5 w-5" />
