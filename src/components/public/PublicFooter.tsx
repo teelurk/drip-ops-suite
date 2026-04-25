@@ -70,7 +70,7 @@ export const PublicFooter = () => {
               href="https://t.me/sawkemcollection"
               target="_blank"
               rel="noreferrer"
-              className="text-off-white transition-colors hover:text-primary"
+              className="text-foreground transition-colors hover:text-primary"
               aria-label="Telegram"
             >
               <Send className="h-5 w-5" />
