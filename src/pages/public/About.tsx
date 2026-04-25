@@ -62,6 +62,87 @@ const CountUp = ({ to, suffix }: { to: number; suffix: string }) => {
   );
 };
 
+const MagneticLine = ({ text }: { text: string }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const m = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 768px)");
+    const update = () => setEnabled(m.matches);
+    update();
+    m.addEventListener("change", update);
+    return () => m.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled || !ref.current) return;
+    const container = ref.current;
+    const letters = Array.from(container.querySelectorAll<HTMLSpanElement>("[data-letter]"));
+    let raf = 0;
+    let mx = -9999, my = -9999;
+
+    const onMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      if (!raf) raf = requestAnimationFrame(apply);
+    };
+    const onLeave = () => {
+      mx = -9999; my = -9999;
+      if (!raf) raf = requestAnimationFrame(apply);
+    };
+    const apply = () => {
+      raf = 0;
+      letters.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const dx = mx - cx;
+        const dy = my - cy;
+        const dist = Math.hypot(dx, dy);
+        const radius = 220;
+        if (dist < radius) {
+          const f = (1 - dist / radius);
+          const tx = -(dx / dist) * f * 28;
+          const ty = -(dy / dist) * f * 28;
+          const rot = (dx / radius) * f * 18;
+          el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg)`;
+          el.style.color = `hsl(var(--primary))`;
+          el.style.textShadow = `0 0 ${20 * f}px hsl(var(--primary) / ${0.6 * f})`;
+        } else {
+          el.style.transform = "";
+          el.style.color = "";
+          el.style.textShadow = "";
+        }
+      });
+    };
+
+    container.addEventListener("mousemove", onMove);
+    container.addEventListener("mouseleave", onLeave);
+    return () => {
+      container.removeEventListener("mousemove", onMove);
+      container.removeEventListener("mouseleave", onLeave);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [enabled]);
+
+  if (!enabled) return <>{text}</>;
+
+  return (
+    <span ref={ref} className="inline-block">
+      {text.split("").map((ch, i) => (
+        <span
+          key={i}
+          data-letter
+          className="inline-block transition-[transform,color,text-shadow] duration-300 ease-out will-change-transform"
+          style={{ whiteSpace: ch === " " ? "pre" : undefined }}
+        >
+          {ch}
+        </span>
+      ))}
+    </span>
+  );
+};
+
 const AboutPage = () => {
   return (
     <>
