@@ -33,6 +33,12 @@ const staggerChild: Variants = {
   show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 const viewportOnce = { once: true, amount: 0.2 } as const;
+
+import { useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { useEffect } from "react";
+import { BrandMarquee } from "@/components/BrandMarquee";
+import { TikTokCard, TIKTOK_PLACEHOLDERS } from "@/components/public/TikTokCard";
+import ourStoryImg from "@/assets/our-story.jpg";
 import { BrandMarquee } from "@/components/BrandMarquee";
 import { TikTokCard, TIKTOK_PLACEHOLDERS } from "@/components/public/TikTokCard";
 import ourStoryImg from "@/assets/our-story.jpg";
