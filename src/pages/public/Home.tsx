@@ -1,7 +1,38 @@
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowLeft, MapPin, Send } from "lucide-react";
 import { useRef } from "react";
+
+// Reusable scroll-reveal variants — modern, simple, distinct per section
+const revealRise: Variants = {
+  hidden: { opacity: 0, y: 60, filter: "blur(8px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+};
+const revealClip: Variants = {
+  hidden: { opacity: 0, clipPath: "inset(0 100% 0 0)" },
+  show: { opacity: 1, clipPath: "inset(0 0% 0 0)", transition: { duration: 1.1, ease: [0.77, 0, 0.18, 1] } },
+};
+const revealScale: Variants = {
+  hidden: { opacity: 0, scale: 0.92, filter: "blur(6px)" },
+  show: { opacity: 1, scale: 1, filter: "blur(0px)", transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] } },
+};
+const revealLeft: Variants = {
+  hidden: { opacity: 0, x: -60 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
+};
+const revealRight: Variants = {
+  hidden: { opacity: 0, x: 60 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
+};
+const staggerParent: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+};
+const staggerChild: Variants = {
+  hidden: { opacity: 0, y: 40, filter: "blur(6px)" },
+  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+};
+const viewportOnce = { once: true, amount: 0.2 } as const;
 import { BrandMarquee } from "@/components/BrandMarquee";
 import { TikTokCard, TIKTOK_PLACEHOLDERS } from "@/components/public/TikTokCard";
 import ourStoryImg from "@/assets/our-story.jpg";
