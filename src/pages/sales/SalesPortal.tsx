@@ -514,7 +514,7 @@ const RecordSaleModal = ({
       return;
     }
     setSuccess(true);
-    setTimeout(() => onConfirm({ color, size, qty, soldPrice }), 600);
+    setTimeout(() => onConfirm({ color, size, qty, soldPrice, payment }), 600);
   };
 
   return (
