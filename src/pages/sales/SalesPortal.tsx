@@ -443,13 +443,27 @@ const SalesPortal = () => {
                 color: args.color,
                 qty: args.qty,
                 price: args.soldPrice,
+                payment: args.payment,
                 staff: staffName,
               });
-              toast.success(`✓ SALE RECORDED — ${sel.name.toUpperCase()} ${args.size} @ ETB ${args.soldPrice.toLocaleString()}`);
+              toast.success(`✓ SALE RECORDED — ${args.payment.toUpperCase()} — ETB ${args.soldPrice.toLocaleString()}`);
               setSel(null);
             }}
           />
         )}
+        {editing && (
+          <EditSaleModal
+            sale={editing}
+            editor={staffName}
+            onClose={() => setEditing(null)}
+            onSave={(changes) => {
+              editSale(editing.id, changes, staffName);
+              toast.success(`Sale updated by ${staffName}`);
+              setEditing(null);
+            }}
+          />
+        )}
+        {auditFor && <AuditModal sale={auditFor} onClose={() => setAuditFor(null)} />}
       </AnimatePresence>
     </div>
   );
@@ -471,7 +485,7 @@ const RecordSaleModal = ({
 }: {
   item: InventoryItem;
   onClose: () => void;
-  onConfirm: (a: { color: string; size: string; qty: number; soldPrice: number }) => void;
+  onConfirm: (a: { color: string; size: string; qty: number; soldPrice: number; payment: PaymentMethod }) => void;
 }) => {
   const colors = item.color.split("/").map((c) => c.trim());
   const original = item.price || 0;
@@ -479,6 +493,7 @@ const RecordSaleModal = ({
   const [size, setSize] = useState(item.sizes[0]);
   const [qty, setQty] = useState(1);
   const [soldPriceStr, setSoldPriceStr] = useState(String(original));
+  const [payment, setPayment] = useState<PaymentMethod>("Cash");
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
