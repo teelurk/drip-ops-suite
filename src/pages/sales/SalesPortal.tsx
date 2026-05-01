@@ -80,7 +80,7 @@ const SalesPortal = () => {
 
   const navItems: { id: View; label: string; icon: typeof LayoutGrid; badge?: number }[] = [
     { id: "catalog", label: "CATALOG", icon: LayoutGrid },
-    { id: "log", label: "TODAY'S LOG", icon: ListOrdered, badge: todaySales.length },
+    { id: "log", label: "TODAY'S LOG", icon: ListOrdered, badge: todayActive.length },
     { id: "week", label: "WEEK STATS", icon: TrendingUp },
     { id: "lowstock", label: "LOW STOCK", icon: AlertTriangle, badge: lowStock.length + outStock.length },
   ];
@@ -279,7 +279,7 @@ const SalesPortal = () => {
                 <div className="mb-4 flex flex-wrap justify-between gap-2">
                   <h2 className="font-display text-2xl">TODAY'S LOG</h2>
                   <p className="font-display text-xl">
-                    {todaySales.length} SALES — <span className="text-primary">ETB {todayRevenue.toLocaleString()}</span>
+                    {todayActive.length} SALES — <span className="text-primary">ETB {todayRevenue.toLocaleString()}</span>
                   </p>
                 </div>
                 <div className="overflow-x-auto">
@@ -288,24 +288,64 @@ const SalesPortal = () => {
                       <tr className="border-b border-border text-[10px] tracking-widest text-muted-foreground">
                         <th className="p-2 text-left">TIME</th>
                         <th className="p-2 text-left">ITEM</th>
-                        <th className="p-2 text-left">BRAND</th>
                         <th className="p-2 text-left">SIZE</th>
                         <th className="p-2 text-left">QTY</th>
+                        <th className="p-2 text-left">PAYMENT</th>
                         <th className="p-2 text-left">SOLD AT</th>
+                        <th className="p-2 text-right">ACTIONS</th>
                       </tr>
                     </thead>
                     <tbody>
                       {todaySales.length === 0 && (
-                        <tr><td colSpan={6} className="p-8 text-center text-muted-foreground">No sales yet today.</td></tr>
+                        <tr><td colSpan={7} className="p-8 text-center text-muted-foreground">No sales yet today.</td></tr>
                       )}
                       {todaySales.map((s) => (
-                        <tr key={s.id} className="border-b border-border/50">
+                        <tr key={s.id} className={`border-b border-border/50 ${s.deleted ? "opacity-40" : ""}`}>
                           <td className="p-2 text-xs">{s.time.toLocaleTimeString()}</td>
-                          <td className="p-2">{s.itemName}</td>
-                          <td className="p-2 text-[10px] tracking-widest text-primary">{s.brand.toUpperCase()}</td>
+                          <td className={`p-2 ${s.deleted ? "line-through" : ""}`}>
+                            <span className="text-[10px] tracking-widest text-primary">{s.brand.toUpperCase()}</span> · {s.itemName}
+                          </td>
                           <td className="p-2">{s.size}</td>
                           <td className="p-2">{s.qty}</td>
+                          <td className="p-2 text-[10px] tracking-widest">{s.payment.toUpperCase()}</td>
                           <td className="p-2 font-display text-lg">ETB {(s.price * s.qty).toLocaleString()}</td>
+                          <td className="p-2">
+                            <div className="flex items-center justify-end gap-1">
+                              <button
+                                onClick={() => setAuditFor(s)}
+                                title="View audit trail"
+                                className="flex h-8 w-8 items-center justify-center border border-border text-muted-foreground hover:border-primary hover:text-primary"
+                              >
+                                <History className="h-3.5 w-3.5" />
+                              </button>
+                              {!s.deleted && (
+                                <>
+                                  <button
+                                    onClick={() => setEditing(s)}
+                                    title="Edit"
+                                    className="flex h-8 w-8 items-center justify-center border border-border text-muted-foreground hover:border-primary hover:text-primary"
+                                  >
+                                    <Pencil className="h-3.5 w-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      if (confirm(`Delete sale of ${s.itemName}? Stock will be restored.`)) {
+                                        deleteSale(s.id, staffName);
+                                        toast.success(`Sale deleted by ${staffName}`);
+                                      }
+                                    }}
+                                    title="Delete"
+                                    className="flex h-8 w-8 items-center justify-center border border-border text-muted-foreground hover:border-destructive hover:text-destructive"
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </button>
+                                </>
+                              )}
+                              {s.deleted && (
+                                <span className="px-2 py-1 text-[9px] tracking-widest bg-destructive/20 text-destructive">DELETED</span>
+                              )}
+                            </div>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
