@@ -4,18 +4,26 @@ import { useNavigate } from "react-router-dom";
 import {
   Search, X, Plus, Minus, Check, LogOut, LayoutGrid, ListOrdered,
   TrendingUp, Calendar, Package, Menu, AlertTriangle, DollarSign,
+  Pencil, Trash2, History, Banknote, Smartphone, Building2,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useApp } from "@/context/AppContext";
+import { useApp, PaymentMethod, Sale } from "@/context/AppContext";
 import { InventoryItem } from "@/data/inventory";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 const cats = ["ALL", "Shoes", "Tops", "Bottoms", "Accessories"] as const;
+const PAYMENTS: { id: PaymentMethod; label: string; icon: typeof Banknote }[] = [
+  { id: "Cash", label: "CASH", icon: Banknote },
+  { id: "Telebirr", label: "TELEBIRR", icon: Smartphone },
+  { id: "CBE", label: "CBE", icon: Building2 },
+];
 
 type View = "catalog" | "log" | "week" | "lowstock";
 
 const SalesPortal = () => {
-  const { inventory, recordSale, sales, staffName, setStaffName } = useApp();
+  const { inventory, recordSale, editSale, deleteSale, sales, staffName, setStaffName } = useApp();
+  const [editing, setEditing] = useState<Sale | null>(null);
+  const [auditFor, setAuditFor] = useState<Sale | null>(null);
   const nav = useNavigate();
   const [now, setNow] = useState(new Date());
   const [q, setQ] = useState("");
