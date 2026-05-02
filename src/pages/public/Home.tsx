@@ -1,7 +1,7 @@
 import { motion, type Variants, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowLeft, MapPin, Send } from "lucide-react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { BrandMarquee } from "@/components/BrandMarquee";
 import { TikTokCard, TIKTOK_PLACEHOLDERS } from "@/components/public/TikTokCard";
 import ourStoryImg from "@/assets/our-story.jpg";
