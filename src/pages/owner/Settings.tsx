@@ -13,7 +13,8 @@ const Settings = () => (
       <div className="border border-border bg-card p-4 sm:p-6 space-y-3">
         <h2 className="font-display text-xl sm:text-2xl">SOCIAL</h2>
         <p className="text-sm">Telegram: <span className="text-primary">@sawkemcollection</span></p>
-        <p className="text-sm">TikTok: <span className="text-primary">@sawkemfashion</span></p>
+        <p className="text-sm">TikTok: <span className="text-primary">@sawkem_fashion</span></p>
+        <p className="text-sm">Instagram: <span className="text-primary">@sawkem_fashion</span></p>
       </div>
       <div className="border border-border bg-card p-4 sm:p-6 space-y-3">
         <h2 className="font-display text-xl sm:text-2xl">LOW STOCK THRESHOLD</h2>
