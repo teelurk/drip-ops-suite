@@ -49,6 +49,7 @@ const FEATURED = [
 const HomePage = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const scrollBy = (n: number) => scrollRef.current?.scrollBy({ left: n, behavior: "smooth" });
+  const [openMap, setOpenMap] = useState<"summit" | "saris" | null>(null);
 
   // Hero parallax — background image drifts up + scales as you scroll
   const heroRef = useRef<HTMLElement>(null);
