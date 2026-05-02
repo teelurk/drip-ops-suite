@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Phone, Check, MapPin, ChevronDown } from "lucide-react";
+import { Send, Phone, Check, MapPin, ChevronDown, Instagram } from "lucide-react";
 import { TikTokIcon } from "@/components/public/PublicNav";
 
 const FAQS = [
@@ -125,6 +125,14 @@ const ContactPage = () => {
               body="New arrivals, fit checks, and restocks announced first on TikTok."
               cta="FOLLOW US"
               href="https://www.tiktok.com/@sawkem_fashion"
+            />
+            <ContactCard
+              icon={<Instagram className="h-7 w-7 text-off-white" />}
+              eyebrow="INSTAGRAM"
+              title="@sawkem_fashion"
+              body="Behind-the-scenes, lookbooks, and daily fits on Instagram."
+              cta="FOLLOW US"
+              href="https://www.instagram.com/sawkem_fashion"
             />
           </div>
         </div>
