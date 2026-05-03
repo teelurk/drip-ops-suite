@@ -232,7 +232,7 @@ const AboutPage = () => {
             </div>
             <div>
               <h2 className="font-display text-5xl md:text-6xl leading-[0.9]">{b.title}</h2>
-              <p className="mt-6 text-sm text-off-white/80 leading-relaxed">{b.body}</p>
+              <Typewriter text={b.body} className="mt-6 text-sm text-off-white/80 leading-relaxed" />
             </div>
           </motion.div>
         ))}
