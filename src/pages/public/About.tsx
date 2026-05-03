@@ -235,16 +235,17 @@ const AboutPage = () => {
               <MagneticLine text={line} />
             </motion.h1>
           ))}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
-            className="mx-auto mt-8 max-w-2xl text-sm text-off-white/80 leading-relaxed"
+            className="mx-auto mt-8 max-w-2xl"
           >
-            Sawkem Fashion is Addis Ababa's home for premium international streetwear.
-            We source the world's most coveted brands and bring them directly to Ethiopia —
-            authentic, original, and exclusively available at our Summit branch.
-          </motion.p>
+            <Typewriter
+              text="Sawkem Fashion is Addis Ababa's home for premium international streetwear. We source the world's most coveted brands and bring them directly to Ethiopia — authentic, original, and exclusively available at our Summit branch."
+              className="text-sm text-off-white/80 leading-relaxed"
+            />
+          </motion.div>
         </div>
       </section>
 
