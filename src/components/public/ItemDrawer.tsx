@@ -124,13 +124,6 @@ export const ItemDrawer = ({
 
               <button
                 onClick={onClose}
-                aria-label="Back"
-                className="absolute left-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/70 text-off-white backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </button>
-              <button
-                onClick={onClose}
                 aria-label="Close"
                 className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/70 text-off-white backdrop-blur-md transition-colors hover:border-primary hover:text-primary"
               >
@@ -196,8 +189,6 @@ export const ItemDrawer = ({
               <p className="mt-6 text-xs text-muted-foreground">
                 {item.qty} item{item.qty === 1 ? "" : "s"} left at Summit Branch
               </p>
-
-              <p className="mt-6 text-sm leading-relaxed text-off-white/80">{describe(item)}</p>
 
               <div className="mt-8 space-y-3">
                 {isOOS ? (
