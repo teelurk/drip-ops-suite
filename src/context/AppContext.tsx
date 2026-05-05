@@ -140,7 +140,26 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeItem: AppCtx["removeItem"] = (id) => {
-    setInventory((inv) => inv.filter((it) => it.id !== id));
+    setInventory((inv) => {
+      const found = inv.find((it) => it.id === id);
+      if (found) setRemovedItems((r) => [{ ...found }, ...r.filter((x) => x.id !== id)]);
+      return inv.filter((it) => it.id !== id);
+    });
+  };
+
+  const restoreItem: AppCtx["restoreItem"] = (id, qty) => {
+    setRemovedItems((r) => {
+      const found = r.find((it) => it.id === id);
+      if (found) {
+        const restored = { ...found, qty: qty ?? (found.qty > 0 ? found.qty : 5) };
+        setInventory((inv) => [restored, ...inv.filter((x) => x.id !== id)]);
+      }
+      return r.filter((it) => it.id !== id);
+    });
+  };
+
+  const purgeRemovedItem: AppCtx["purgeRemovedItem"] = (id) => {
+    setRemovedItems((r) => r.filter((it) => it.id !== id));
   };
 
   return (
@@ -154,6 +173,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         addItem,
         editItem,
         removeItem,
+        removedItems,
+        restoreItem,
+        purgeRemovedItem,
         sales,
         ownerLoggedIn,
         setOwnerLoggedIn,
