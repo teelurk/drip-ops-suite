@@ -57,6 +57,7 @@ const Ctx = createContext<AppCtx | null>(null);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [inventory, setInventory] = useState<InventoryItem[]>(initialInventory);
+  const [removedItems, setRemovedItems] = useState<InventoryItem[]>([]);
   const [sales, setSales] = useState<Sale[]>([]);
   const [ownerLoggedIn, setOwnerLoggedIn] = useState(false);
   const [staffName, setStaffName] = useState("");
