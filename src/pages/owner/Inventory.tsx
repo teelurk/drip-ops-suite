@@ -165,6 +165,54 @@ const InventoryPage = () => {
         </table>
       </div>
 
+      {/* REMOVED ITEMS — RESTORE BIN */}
+      {removedItems.length > 0 && (
+        <section className="border border-border bg-card">
+          <header className="flex items-center justify-between border-b border-border p-3 sm:p-4">
+            <div>
+              <h2 className="font-display text-xl sm:text-2xl tracking-wide">REMOVED ITEMS</h2>
+              <p className="text-[10px] tracking-widest text-muted-foreground">
+                {removedItems.length} ITEM{removedItems.length === 1 ? "" : "S"} — RESTORE TO RETURN TO INVENTORY
+              </p>
+            </div>
+          </header>
+          <ul className="divide-y divide-border">
+            {removedItems.map((it) => (
+              <li key={it.id} className="flex items-center gap-3 p-3 sm:p-4">
+                <div className="h-12 w-12 flex-shrink-0 bg-muted flex items-center justify-center font-display text-base text-primary overflow-hidden">
+                  {it.image ? <img src={it.image} alt={it.name} className="h-full w-full object-cover" /> : it.brand[0]}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] tracking-widest text-primary truncate">{it.brand.toUpperCase()}</p>
+                  <p className="text-sm font-medium truncate">{it.name}</p>
+                  <p className="text-[10px] text-muted-foreground truncate">{it.category} • {it.color} • {it.sizes.join(", ")}</p>
+                </div>
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <button
+                    onClick={() => {
+                      restoreItem(it.id, Math.max(it.qty, 5));
+                      toast.success(`${it.name} restored to inventory`);
+                    }}
+                    className="inline-flex items-center justify-center gap-2 bg-primary px-3 py-2 text-[10px] tracking-widest text-primary-foreground hover:bg-primary/90"
+                  >
+                    <RotateCcw className="h-3 w-3" /> RESTORE
+                  </button>
+                  <button
+                    onClick={() => {
+                      purgeRemovedItem(it.id);
+                      toast.success("Removed permanently");
+                    }}
+                    className="inline-flex items-center justify-center gap-2 border border-destructive/40 px-3 py-2 text-[10px] tracking-widest text-destructive hover:bg-destructive/10"
+                  >
+                    <Trash2 className="h-3 w-3" /> PURGE
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <ItemEditor
         key={selected?.id ?? "none"}
         item={selected}
