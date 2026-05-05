@@ -131,6 +131,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     return newItem;
   };
 
+  const editItem: AppCtx["editItem"] = (id, changes) => {
+    setInventory((inv) => inv.map((it) => (it.id === id ? { ...it, ...changes } : it)));
+  };
+
+  const removeItem: AppCtx["removeItem"] = (id) => {
+    setInventory((inv) => inv.filter((it) => it.id !== id));
+  };
+
   return (
     <Ctx.Provider
       value={{
@@ -140,6 +148,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         deleteSale,
         restock,
         addItem,
+        editItem,
+        removeItem,
         sales,
         ownerLoggedIn,
         setOwnerLoggedIn,
