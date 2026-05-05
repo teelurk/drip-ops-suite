@@ -1,14 +1,19 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, Pencil, Trash2, RotateCcw, Plus, Minus } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 const statusOf = (qty: number) =>
   qty === 0 ? "OUT" : qty <= 3 ? "LOW" : "IN";
 
 const InventoryPage = () => {
-  const { inventory } = useApp();
+  const { inventory, restock, editItem, removeItem } = useApp();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("ALL");
   const [brand, setBrand] = useState("ALL");
