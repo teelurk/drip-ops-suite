@@ -13,7 +13,7 @@ const statusOf = (qty: number) =>
   qty === 0 ? "OUT" : qty <= 3 ? "LOW" : "IN";
 
 const InventoryPage = () => {
-  const { inventory, restock, editItem, removeItem } = useApp();
+  const { inventory, restock, editItem, removeItem, removedItems, restoreItem, purgeRemovedItem } = useApp();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("ALL");
   const [brand, setBrand] = useState("ALL");
