@@ -41,6 +41,8 @@ interface AppCtx {
   deleteSale: (id: string, editor: string) => void;
   restock: (id: number, amount?: number) => void;
   addItem: (item: Omit<InventoryItem, "id">) => InventoryItem;
+  editItem: (id: number, changes: Partial<Omit<InventoryItem, "id">>) => void;
+  removeItem: (id: number) => void;
   sales: Sale[];
   ownerLoggedIn: boolean;
   setOwnerLoggedIn: (v: boolean) => void;
