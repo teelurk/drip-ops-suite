@@ -41,6 +41,8 @@ interface AppCtx {
   deleteSale: (id: string, editor: string) => void;
   restock: (id: number, amount?: number) => void;
   addItem: (item: Omit<InventoryItem, "id">) => InventoryItem;
+  editItem: (id: number, changes: Partial<Omit<InventoryItem, "id">>) => void;
+  removeItem: (id: number) => void;
   sales: Sale[];
   ownerLoggedIn: boolean;
   setOwnerLoggedIn: (v: boolean) => void;
@@ -129,6 +131,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     return newItem;
   };
 
+  const editItem: AppCtx["editItem"] = (id, changes) => {
+    setInventory((inv) => inv.map((it) => (it.id === id ? { ...it, ...changes } : it)));
+  };
+
+  const removeItem: AppCtx["removeItem"] = (id) => {
+    setInventory((inv) => inv.filter((it) => it.id !== id));
+  };
+
   return (
     <Ctx.Provider
       value={{
@@ -138,6 +148,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         deleteSale,
         restock,
         addItem,
+        editItem,
+        removeItem,
         sales,
         ownerLoggedIn,
         setOwnerLoggedIn,

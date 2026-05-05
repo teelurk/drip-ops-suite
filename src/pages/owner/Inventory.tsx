@@ -1,14 +1,19 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { Search, Pencil, Trash2, RotateCcw, Plus, Minus } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 const statusOf = (qty: number) =>
   qty === 0 ? "OUT" : qty <= 3 ? "LOW" : "IN";
 
 const InventoryPage = () => {
-  const { inventory } = useApp();
+  const { inventory, restock, editItem, removeItem } = useApp();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("ALL");
   const [brand, setBrand] = useState("ALL");
@@ -160,32 +165,167 @@ const InventoryPage = () => {
         </table>
       </div>
 
-      <Sheet open={!!selected} onOpenChange={(o) => !o && setOpen(null)}>
-        <SheetContent className="bg-card border-border text-off-white">
-          {selected && (
-            <>
-              <SheetHeader>
-                <SheetTitle className="font-display text-3xl text-off-white">{selected.name}</SheetTitle>
-              </SheetHeader>
-              <div className="mt-6 space-y-4">
-                <div className="aspect-square w-full bg-muted flex items-center justify-center font-display text-7xl text-primary">
-                  {selected.brand[0]}
-                </div>
-                <div className="space-y-2 text-sm">
-                  <p className="text-[10px] tracking-widest text-primary">{selected.brand.toUpperCase()}</p>
-                  <p><span className="text-muted-foreground">Category:</span> {selected.category}</p>
-                  <p><span className="text-muted-foreground">Color:</span> {selected.color}</p>
-                  <p><span className="text-muted-foreground">Sizes:</span> {selected.sizes.join(", ")}</p>
-                  <p><span className="text-muted-foreground">Quantity:</span> <span className="font-display text-2xl">{selected.qty}</span></p>
-                  {selected.price && <p><span className="text-muted-foreground">Price:</span> ETB {selected.price.toLocaleString()}</p>}
-                </div>
-              </div>
-            </>
-          )}
-        </SheetContent>
-      </Sheet>
+      <ItemEditor
+        key={selected?.id ?? "none"}
+        item={selected}
+        onClose={() => setOpen(null)}
+        onSave={(changes) => {
+          if (!selected) return;
+          editItem(selected.id, changes);
+          toast.success("Item updated");
+          setOpen(null);
+        }}
+        onRestock={(amount) => {
+          if (!selected) return;
+          restock(selected.id, amount);
+          toast.success(`Restocked +${amount}`);
+        }}
+        onDelete={() => {
+          if (!selected) return;
+          removeItem(selected.id);
+          toast.success("Item removed from inventory");
+          setOpen(null);
+        }}
+      />
     </div>
   );
 };
+
+interface EditorProps {
+  item: ReturnType<typeof useApp>["inventory"][number] | undefined;
+  onClose: () => void;
+  onSave: (changes: Partial<{ brand: string; name: string; color: string; qty: number; price: number; sizes: string[] }>) => void;
+  onRestock: (amount: number) => void;
+  onDelete: () => void;
+}
+
+const ItemEditor = ({ item, onClose, onSave, onRestock, onDelete }: EditorProps) => {
+  const [brand, setBrand] = useState("");
+  const [name, setName] = useState("");
+  const [color, setColor] = useState("");
+  const [qty, setQty] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [sizes, setSizes] = useState("");
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [restockAmt, setRestockAmt] = useState(5);
+
+  useEffect(() => {
+    if (!item) return;
+    setBrand(item.brand);
+    setName(item.name);
+    setColor(item.color);
+    setQty(item.qty);
+    setPrice(item.price ?? 0);
+    setSizes(item.sizes.join(", "));
+  }, [item]);
+
+  const finished = item?.qty === 0;
+
+  return (
+    <Sheet open={!!item} onOpenChange={(o) => !o && onClose()}>
+      <SheetContent className="bg-card border-border text-off-white overflow-y-auto w-full sm:max-w-md">
+        {item && (
+          <>
+            <SheetHeader>
+              <SheetTitle className="font-display text-3xl text-off-white">EDIT ITEM</SheetTitle>
+            </SheetHeader>
+
+            <div className="mt-6 space-y-5">
+              <div className="aspect-square w-full bg-muted flex items-center justify-center font-display text-7xl text-primary overflow-hidden">
+                {item.image ? <img src={item.image} alt={item.name} className="h-full w-full object-cover" /> : item.brand[0]}
+              </div>
+
+              {finished && (
+                <div className="border border-warning/40 bg-warning/10 p-3 text-[11px] tracking-widest text-warning">
+                  ITEM FINISHED — RESTOCK TO RETURN TO STORE
+                  <div className="mt-2 flex items-center gap-2">
+                    <button onClick={() => setRestockAmt(Math.max(1, restockAmt - 1))} className="border border-border p-1 hover:bg-off-white/[0.06]"><Minus className="h-3 w-3" /></button>
+                    <input
+                      type="number"
+                      value={restockAmt}
+                      onChange={(e) => setRestockAmt(Math.max(1, +e.target.value || 1))}
+                      className="w-16 border border-border bg-background px-2 py-1 text-center text-sm"
+                    />
+                    <button onClick={() => setRestockAmt(restockAmt + 1)} className="border border-border p-1 hover:bg-off-white/[0.06]"><Plus className="h-3 w-3" /></button>
+                    <button
+                      onClick={() => onRestock(restockAmt)}
+                      className="ml-auto inline-flex items-center gap-2 bg-primary px-3 py-2 text-[10px] tracking-widest text-primary-foreground hover:bg-primary/90"
+                    >
+                      <RotateCcw className="h-3 w-3" /> RESTOCK
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <Field label="Brand" value={brand} onChange={setBrand} />
+              <Field label="Name" value={name} onChange={setName} />
+              <Field label="Color" value={color} onChange={setColor} />
+              <Field label="Sizes (comma separated)" value={sizes} onChange={setSizes} />
+              <div className="grid grid-cols-2 gap-3">
+                <Field label="Qty" type="number" value={String(qty)} onChange={(v) => setQty(+v || 0)} />
+                <Field label="Price (ETB)" type="number" value={String(price)} onChange={(v) => setPrice(+v || 0)} />
+              </div>
+
+              <div className="flex flex-col gap-2 pt-3">
+                <button
+                  onClick={() => onSave({
+                    brand, name, color, qty, price,
+                    sizes: sizes.split(",").map((s) => s.trim()).filter(Boolean),
+                  })}
+                  className="inline-flex items-center justify-center gap-2 bg-primary px-4 py-3 text-[11px] tracking-widest text-primary-foreground hover:bg-primary/90"
+                >
+                  <Pencil className="h-3 w-3" /> SAVE CHANGES
+                </button>
+                {!finished && (
+                  <button
+                    onClick={() => onRestock(5)}
+                    className="inline-flex items-center justify-center gap-2 border border-border px-4 py-3 text-[11px] tracking-widest hover:bg-off-white/[0.06]"
+                  >
+                    <RotateCcw className="h-3 w-3" /> RESTOCK +5
+                  </button>
+                )}
+                <button
+                  onClick={() => setConfirmDelete(true)}
+                  className="inline-flex items-center justify-center gap-2 border border-destructive/40 px-4 py-3 text-[11px] tracking-widest text-destructive hover:bg-destructive/10"
+                >
+                  <Trash2 className="h-3 w-3" /> REMOVE ITEM
+                </button>
+              </div>
+            </div>
+
+            <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Remove this item?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {item.brand} — {item.name} will be deleted from inventory. This cannot be undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={onDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    Remove
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </>
+        )}
+      </SheetContent>
+    </Sheet>
+  );
+};
+
+const Field = ({ label, value, onChange, type = "text" }: { label: string; value: string; onChange: (v: string) => void; type?: string }) => (
+  <label className="block">
+    <span className="text-[10px] tracking-widest text-muted-foreground">{label.toUpperCase()}</span>
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="mt-1 w-full border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+    />
+  </label>
+);
 
 export default InventoryPage;
